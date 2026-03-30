@@ -153,6 +153,12 @@ footer{background:#0a0a0a;text-align:center;padding:16px;color:rgba(255,255,255,
 /* SCROLL ANIMATION */
 .reveal{opacity:0;transform:translateY(32px);transition:opacity .6s ease,transform .6s ease}
 .reveal.visible{opacity:1;transform:translateY(0)}
+
+.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:1000;align-items:center;justify-content:center;cursor:zoom-out}
+.lightbox.open{display:flex}
+.lightbox img{max-width:90vw;max-height:90vh;object-fit:contain;border-radius:4px;animation:lbIn .25s ease}
+@keyframes lbIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+.carousel-item img{cursor:zoom-in}
 </style>
 </head>
 <body>
@@ -197,16 +203,16 @@ footer{background:#0a0a0a;text-align:center;padding:16px;color:rgba(255,255,255,
     <button class="arr-btn prev" id="gPrev"><svg viewBox="-2 0 16 24" width="20" height="40" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4 L2 12 L10 20"/></svg></button>
     <div class="carousel-track-outer">
       <div class="carousel-track" id="gTrack">
-        <div class="carousel-item"><img src="image/01.jpeg" alt="" onerror="this.style.display='none'"><span class="label">FOTO 1</span></div>
-        <div class="carousel-item"><img src="image/02.jpeg" alt="" onerror="this.style.display='none'"><span class="label">FOTO 2</span></div>
-        <div class="carousel-item"><img src="image/03.jpeg" alt="" onerror="this.style.display='none'"><span class="label">FOTO 3</span></div>
-        <div class="carousel-item"><img src="image/04.jpeg" alt="" onerror="this.style.display='none'"><span class="label">FOTO 4</span></div>
-        <div class="carousel-item"><img src="image/05.jpeg" alt="" onerror="this.style.display='none'"><span class="label">FOTO 5</span></div>
-        <div class="carousel-item"><img src="image/06.jpeg" alt="" onerror="this.style.display='none'"><span class="label">FOTO 6</span></div>
-        <div class="carousel-item"><img src="image/07jpeg" alt="" onerror="this.style.display='none'"><span class="label">FOTO 7</span></div>
-        <div class="carousel-item"><img src="image/08.jpeg" alt="" onerror="this.style.display='none'"><span class="label">FOTO 8</span></div>
-        <div class="carousel-item"><img src="image/09.jpeg" alt="" onerror="this.style.display='none'"><span class="label">FOTO 9</span></div>
-        <div class="carousel-item"><img src="image/10.jpeg" alt="" onerror="this.style.display='none'"><span class="label">FOTO 10</span></div>
+        <div class="carousel-item"><img src="image/01.jpeg" alt="" onerror="this.style.display='none'"></div>
+        <div class="carousel-item"><img src="image/02.jpeg" alt="" onerror="this.style.display='none'"></div>
+        <div class="carousel-item"><img src="image/03.jpeg" alt="" onerror="this.style.display='none'"></div>
+        <div class="carousel-item"><img src="image/04.jpeg" alt="" onerror="this.style.display='none'"></div>
+        <div class="carousel-item"><img src="image/05.jpeg" alt="" onerror="this.style.display='none'"></div>
+        <div class="carousel-item"><img src="image/06.jpeg" alt="" onerror="this.style.display='none'"></div>
+        <div class="carousel-item"><img src="image/07jpeg" alt="" onerror="this.style.display='none'"></div>
+        <div class="carousel-item"><img src="image/08.jpeg" alt="" onerror="this.style.display='none'"></div>
+        <div class="carousel-item"><img src="image/09.jpeg" alt="" onerror="this.style.display='none'"></div>
+        <div class="carousel-item"><img src="image/10.jpeg" alt="" onerror="this.style.display='none'"></div>
       </div>
     </div>
     <button class="arr-btn next" id="gNext"><svg viewBox="-2 0 16 24" width="20" height="40" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4 L10 12 L2 20"/></svg></button>
@@ -299,6 +305,21 @@ const observer = new IntersectionObserver((entries) => {
   });
 }, {threshold: 0.12});
 revealEls.forEach(el => observer.observe(el));
+
+// LIGHTBOX
+document.querySelectorAll('.carousel-item img').forEach(img => {
+  img.addEventListener('click', e => {
+    e.stopPropagation();
+    document.getElementById('lbImg').src = img.src;
+    document.getElementById('lightbox').classList.add('open');
+  });
+});
+function closeLightbox(){document.getElementById('lightbox').classList.remove('open')}
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeLightbox(); });
 </script>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <img id="lbImg" src="" alt="">
+</div>
 </body>
 </html>
